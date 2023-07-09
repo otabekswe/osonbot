@@ -7,16 +7,6 @@ class Serializable:
 
 
 class Deserializable:
-    @property
-    def bot(self):
-        if not hasattr(self, '_bot'):
-            raise AttributeError('Object is not configured for bot!')
-        return getattr(self, '_bot')
-
-    @bot.setter
-    def bot(self, bot):
-        setattr(self, '_bot', bot)
-
     def to_json(self):
         return getattr(self, 'data', {})
 
@@ -25,7 +15,7 @@ class Deserializable:
         raise NotImplementedError
 
     @staticmethod
-    def check_json(data):
+    def check_json(data) -> dict:
         if isinstance(data, dict):
             return data
         elif isinstance(data, str):
@@ -35,3 +25,6 @@ class Deserializable:
 
     def __str__(self):
         return json.dumps(self.to_json())
+
+    def __repr__(self):
+        return str(self)
