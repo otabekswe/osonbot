@@ -8,6 +8,7 @@ from .api import ApiMethod
 from .types.user import User
 from .types.chat import Chat
 from .types.update import Update
+from .utils.payload import generate_payload
 
 
 class OsonBot:
@@ -29,10 +30,6 @@ class OsonBot:
     def _on_exit(self):
         self.session.close()
 
-    def _prepare_object(self, obj):
-        obj.bot = self
-        return obj
-
     @property
     async def me(self) -> User:
         if not hasattr(self, '_me'):
@@ -44,23 +41,15 @@ class OsonBot:
 
     async def get_me(self) -> User:
         raw = await self.request(ApiMethod.GET_ME)
-        return self._prepare_object(User.de_json(raw))
+        return User.de_json(raw)
 
     async def get_chat(self, chat_id) -> User:
-        payload = {'chat_id': chat_id}
+        payload = generate_payload(**locals())
         raw = await self.request(ApiMethod.GET_CHAT, payload)
-        return self._prepare_object(Chat.de_json(raw))
+        return Chat.de_json(raw)
 
     async def get_updates(self, offset=None, limit=None, timeout=None, allowed_updates=None):
-        payload = {}
-        if offset:
-            payload['offset'] = offset
-        if limit:
-            payload['limit'] = limit
-        if timeout:
-            payload['timeout'] = timeout
-        if allowed_updates:
-            payload['allowed_updates'] = allowed_updates
+        payload = generate_payload(**locals())
 
         raw = await self.request(ApiMethod.GET_UPDATES, payload)
-        return [self._prepare_object(Update.de_json(raw_update)) for raw_update in raw]
+        return [Update.de_json(raw_update) for raw_update in raw]
