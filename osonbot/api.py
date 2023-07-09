@@ -37,7 +37,7 @@ async def _check_result(method_name, response):
         code = result_json.get('error_code')
         description = result_json.get('description')
         raise TelegramAPIError(f"Error code: {code} Description {description}", method_name, response.status, body)
-
+    log.debug(f"Response for `{method_name}`: {result_json}")
     return result_json.get('result')
 
 
