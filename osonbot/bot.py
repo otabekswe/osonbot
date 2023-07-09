@@ -6,6 +6,7 @@ import aiohttp
 from . import api
 from .api import ApiMethod
 from .types.user import User
+from .types.chat import Chat
 
 
 class OsonBot:
@@ -42,4 +43,9 @@ class OsonBot:
 
     async def get_me(self) -> User:
         raw = await self.request(ApiMethod.GET_ME)
+        return self._prepare_object(User.de_json(raw))
+
+    async def get_chat(self, chat_id) -> User:
+        payload = {'chat_id': chat_id}
+        raw = await self.request(ApiMethod.GET_CHAT, payload)
         return self._prepare_object(User.de_json(raw))
