@@ -1,4 +1,5 @@
 from osonbot.types import Deserializable
+from osonbot.utils.user_language import get_language
 
 
 class User(Deserializable):
@@ -36,3 +37,9 @@ class User(Deserializable):
         if self.username:
             return '@' + self.username
         return self.full_name
+
+    @property
+    def language(self):
+        if not self.language_code:
+            return None
+        return get_language(self.language_code)
