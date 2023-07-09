@@ -3,6 +3,7 @@ import datetime
 from osonbot.types import Deserializable
 from osonbot.types.chat import Chat
 from osonbot.types.user import User
+from osonbot.types.message_entity import MessageEntity
 
 
 class Message(Deserializable):
@@ -12,14 +13,14 @@ class Message(Deserializable):
         'sticker', 'video', 'voice', 'video_note', 'new_chat_members', 'caption', 'contact', 'location', 'venue',
         'new_chat_member', 'left_chat_member', 'new_chat_title', 'new_chat_photo', 'delete_chat_photo',
         'group_chat_created', 'supergroup_chat_created', 'channel_chat_created', 'migrate_to_chat_id',
-        'migrate_from_chat_id', 'pinned_message', 'invoice', 'successful_payment' )
+        'migrate_from_chat_id', 'pinned_message', 'invoice', 'successful_payment', 'content_type')
 
     def __init__(self, data, message_id, from_user, date, chat, forward_from, forward_from_chat,
                  forward_from_message_id, forward_date, reply_to_message, edit_date, text, entities, audio, document,
                  game, photo, sticker, video, voice, video_note, new_chat_members, caption, contact, location, venue,
                  new_chat_member, left_chat_member, new_chat_title, new_chat_photo, delete_chat_photo,
                  group_chat_created, supergroup_chat_created, channel_chat_created, migrate_to_chat_id,
-                 migrate_from_chat_id, pinned_message, invoice, successful_payment ):
+                 migrate_from_chat_id, pinned_message, invoice, successful_payment, content_type):
         self.data = data
 
         self.message_id: int = message_id
@@ -61,6 +62,7 @@ class Message(Deserializable):
         self.pinned_message = pinned_message
         self.invoice = invoice
         self.successful_payment = successful_payment
+        self.content_type = content_type
 
     @classmethod
     def _parse_date(cls, unix_time):
@@ -68,15 +70,15 @@ class Message(Deserializable):
 
     @classmethod
     def _parse_user(cls, user):
-        return User.de_json(user)
+        return User.de_json(user) if user else None
 
     @classmethod
     def _parse_chat(cls, chat):
-        return Chat.de_json(chat)
+        return Chat.de_json(chat) if chat else None
 
     @classmethod
-    def _parse_message(cls, message):
-        return Message.de_json(message)
+    def _parse_message(cls, entities):
+        return [MessageEntity.de_json(entity) for entity in entities] if entities else None
 
     @classmethod
     def de_json(cls, data):
@@ -94,7 +96,7 @@ class Message(Deserializable):
         edit_date = cls._parse_date(data.get('edit_date', 0))
         text = data.get('text')
 
-        entities = data.get('entities')
+        entities = cls._parse_message(data.get('entities'))
         audio = data.get('audio')
         document = data.get('document')
         game = data.get('game')
@@ -122,14 +124,62 @@ class Message(Deserializable):
         invoice = data.get('invoice')
         successful_payment = data.get('successful_payment')
 
+        if text:
+            content_type = ContentType.TEXT
+        elif audio:
+            content_type = ContentType.AUDIO
+        elif document:
+            content_type = ContentType.DOCUMENT
+        elif game:
+            content_type = ContentType.GAME
+        elif photo:
+            content_type = ContentType.PHOTO
+        elif sticker:
+            content_type = ContentType.STICKER
+        elif video:
+            content_type = ContentType.VIDEO
+        elif voice:
+            content_type = ContentType.VOICE
+        elif new_chat_member or new_chat_members:
+            content_type = ContentType.NEW_CHAT_MEMBERS
+        elif left_chat_member:
+            content_type = ContentType.LEFT_CHAT_MEMBER
+        elif invoice:
+            content_type = ContentType.INVOICE
+        elif successful_payment:
+            content_type = ContentType.SUCCESSFUL_PAYMENT
+        else:
+            content_type = ContentType.UNKNOWN
+
         return Message(
             data, message_id, from_user, date, chat, forward_from, forward_from_chat,
            forward_from_message_id, forward_date, reply_to_message, edit_date, text, entities, audio,
            document, game, photo, sticker, video, voice, video_note, new_chat_members, caption, contact,
            location, venue, new_chat_member, left_chat_member, new_chat_title, new_chat_photo,
            delete_chat_photo, group_chat_created, supergroup_chat_created, channel_chat_created,
-           migrate_to_chat_id, migrate_from_chat_id, pinned_message, invoice, successful_payment )
+           migrate_to_chat_id, migrate_from_chat_id, pinned_message, invoice, successful_payment, content_type)
+
 
     def is_command(self):
         return self.text and self.text.startswith('/')
 
+
+class ContentType:
+    AUDIO = 'audio'
+    DOCUMENT = 'document'
+    GAME = 'game'
+    INVOICE = 'invoice'
+    LEFT_CHAT_MEMBER = 'left_chat_member'
+    NEW_CHAT_MEMBERS = 'new_chat_members'
+    PHOTO = 'photo'
+    STICKER = 'sticker'
+    SUCCESSFUL_PAYMENT = 'successful_payment'
+    TEXT = 'text'
+    UNKNOWN = 'unknown'
+    VIDEO = 'video'
+    VOICE = 'voice'
+
+
+class ParseMode:
+    MARKDOWN = 'markdown'
+    HTML = 'html'
