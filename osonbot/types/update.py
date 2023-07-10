@@ -4,12 +4,11 @@ from .message import Message
 
 class Update(Deserializable):
     __slots__ = (
-        'data', 'update_id', 'message', 'edited_message', 'channel_post', 'edited_channel_post', 'inline_query',
+        'update_id', 'message', 'edited_message', 'channel_post', 'edited_channel_post', 'inline_query',
         'chosen_inline_result', 'callback_query', 'shipping_query', 'pre_checkout_query' )
 
-    def __init__(self, data, update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
+    def __init__(self, update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
                  chosen_inline_result, callback_query, shipping_query, pre_checkout_query):
-        self.data = data
         self.update_id = update_id
         self.message: Message = message
         self.edited_message: Message = edited_message
@@ -26,20 +25,20 @@ class Update(Deserializable):
         return Message.de_json(message) if message else None
 
     @classmethod
-    def de_json(cls, data):
-        data = cls.check_json(data)
+    def de_json(cls, raw_data):
+        raw_data = cls.check_json(raw_data)
 
-        update_id = data.get('data')
-        message = cls._parse_message(data.get('message'))
-        edited_message = cls._parse_message(data.get('edited_message'))
-        channel_post = cls._parse_message(data.get('channel_post'))
-        edited_channel_post = cls._parse_message(data.get('edited_channel_post'))
+        update_id = raw_data.get('raw_data')
+        message = cls._parse_message(raw_data.get('message'))
+        edited_message = cls._parse_message(raw_data.get('edited_message'))
+        channel_post = cls._parse_message(raw_data.get('channel_post'))
+        edited_channel_post = cls._parse_message(raw_data.get('edited_channel_post'))
 
-        inline_query = data.get('inline_query')
-        chosen_inline_result = data.get('chosen_inline_result')
-        callback_query = data.get('callback_query')
-        shipping_query = data.get('shipping_query')
-        pre_checkout_query = data.get('pre_checkout_query')
-        return Update(data, update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
+        inline_query = raw_data.get('inline_query')
+        chosen_inline_result = raw_data.get('chosen_inline_result')
+        callback_query = raw_data.get('callback_query')
+        shipping_query = raw_data.get('shipping_query')
+        pre_checkout_query = raw_data.get('pre_checkout_query')
+        return Update(update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
                       chosen_inline_result, callback_query, shipping_query, pre_checkout_query)
 

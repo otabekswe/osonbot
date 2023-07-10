@@ -6,10 +6,9 @@ class Poll(Deserializable):
                  'allows_multiple_answers', 'correct_option_id', 'explanation', 'explanation_entities', 'open_period',
                  'close_date')
 
-    def __init__(self, data, id, question, options, total_voter_count, is_closed, is_anonymous, type,
+    def __init__(self, id, question, options, total_voter_count, is_closed, is_anonymous, type,
                  allows_multiple_answers, correct_option_id, explanation, explanation_entities, open_period,
                  close_date):
-        self.data = data
         self.id = id
         self.question = question
         self.options = options
@@ -25,22 +24,21 @@ class Poll(Deserializable):
         self.close_date = close_date
 
     @classmethod
-    def de_json(cls, data):
-        data = cls.check_json(data)
+    def de_json(cls, raw_data):
+        raw_data = cls.check_json(raw_data)
 
-        id: str = data.get('id')
-        question: str = data.get('question')
-        options: list = data.get('options')
-        total_voter_count: int = data.get('total_voter_count')
-        is_closed: bool = data.get('is_closed')
-        is_anonymous: bool = data.get('is_anonymous')
-        type: str = data.get('type')
-        allows_multiple_answers: bool = data.get('allows_multiple_answers')
-        correct_option_id: int = data.get('correct_option_id')
-        explanation: str = data.get('explanation')
-        explanation_entities: list = data.get('explanation_entities')
-        open_period: int = data.get('open_period')
-        close_date: int = data.get('close_date')
-        return Poll(data, id, question, options, total_voter_count, is_closed, is_anonymous, type,
-                    allows_multiple_answers, correct_option_id, explanation, explanation_entities, open_period,
-                    close_date)
+        id: str = raw_data.get('id')
+        question: str = raw_data.get('question')
+        options: list = raw_data.get('options')
+        total_voter_count: int = raw_data.get('total_voter_count')
+        is_closed: bool = raw_data.get('is_closed')
+        is_anonymous: bool = raw_data.get('is_anonymous')
+        type: str = raw_data.get('type')
+        allows_multiple_answers: bool = raw_data.get('allows_multiple_answers')
+        correct_option_id: int = raw_data.get('correct_option_id')
+        explanation: str = raw_data.get('explanation')
+        explanation_entities: list = raw_data.get('explanation_entities')
+        open_period: int = raw_data.get('open_period')
+        close_date: int = raw_data.get('close_date')
+        return Poll(id, question, options, total_voter_count, is_closed, is_anonymous, type, allows_multiple_answers,
+                    correct_option_id, explanation, explanation_entities, open_period, close_date)

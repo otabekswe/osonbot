@@ -4,8 +4,7 @@ from . import Deserializable
 class Location(Deserializable):
     __slots__ = ('longitude', 'latitude', 'horizontal_accuracy', 'live_period', 'heading', 'proximity_alert_radius')
 
-    def __init__(self, data, longitude, latitude, horizontal_accuracy, live_period, heading, proximity_alert_radius):
-        self.data = data
+    def __init__(self, longitude, latitude, horizontal_accuracy, live_period, heading, proximity_alert_radius):
         self.longitude = longitude
         self.latitude = latitude
         self.horizontal_accuracy = horizontal_accuracy
@@ -14,13 +13,13 @@ class Location(Deserializable):
         self.proximity_alert_radius = proximity_alert_radius
 
     @classmethod
-    def de_json(cls, data):
-        data = cls.check_json(data)
+    def de_json(cls, raw_data):
+        raw_data = cls.check_json(raw_data)
 
-        longitude: float = data.get('longitude')
-        latitude: float = data.get('latitude')
-        horizontal_accuracy: float = data.get('horizontal_accuracy')
-        live_period: int = data.get('live_period')
-        heading: int = data.get('heading')
-        proximity_alert_radius: int = data.get('proximity_alert_radius')
-        return Location(data, longitude, latitude, horizontal_accuracy, live_period, heading, proximity_alert_radius)
+        longitude: float = raw_data.get('longitude')
+        latitude: float = raw_data.get('latitude')
+        horizontal_accuracy: float = raw_data.get('horizontal_accuracy')
+        live_period: int = raw_data.get('live_period')
+        heading: int = raw_data.get('heading')
+        proximity_alert_radius: int = raw_data.get('proximity_alert_radius')
+        return Location(longitude, latitude, horizontal_accuracy, live_period, heading, proximity_alert_radius)

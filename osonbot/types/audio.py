@@ -6,9 +6,8 @@ class Audio(Deserializable):
     __slots__ = ('field_id', 'file_unique_id', 'duration', 'performer', 'title', 'file_name', 'mime_type', 'file_size',
                  'thumbnail')
 
-    def __init__(self, data, field_id, file_unique_id, duration, performer, title, file_name, mime_type, file_size,
+    def __init__(self, field_id, file_unique_id, duration, performer, title, file_name, mime_type, file_size,
                  thumbnail):
-        self.data = data
         self.field_id = field_id
         self.file_unique_id = file_unique_id
         self.duration = duration
@@ -20,18 +19,18 @@ class Audio(Deserializable):
         self.thumbnail = thumbnail
 
     @classmethod
-    def de_json(cls, data):
-        data = cls.check_json(data)
+    def de_json(cls, raw_data):
+        raw_data = cls.check_json(raw_data)
 
-        field_id: str = data.get('field_id')
-        file_unique_id: str = data.get('file_unique_id')
-        duration: int = data.get('duration')
-        performer: str = data.get('performer')
-        title: str = data.get('title')
-        file_name: str = data.get('file_name')
-        mime_type: str = data.get('mime_type')
-        file_size: int = data.get('file_size')
-        thumbnail: PhotoSize = data.get('thumbnail')
+        field_id: str = raw_data.get('field_id')
+        file_unique_id: str = raw_data.get('file_unique_id')
+        duration: int = raw_data.get('duration')
+        performer: str = raw_data.get('performer')
+        title: str = raw_data.get('title')
+        file_name: str = raw_data.get('file_name')
+        mime_type: str = raw_data.get('mime_type')
+        file_size: int = raw_data.get('file_size')
+        thumbnail: PhotoSize = raw_data.get('thumbnail')
 
-        return Audio(data, field_id, file_unique_id, duration, performer, title, file_name, mime_type, file_size,
+        return Audio(field_id, file_unique_id, duration, performer, title, file_name, mime_type, file_size,
                      thumbnail)

@@ -4,9 +4,7 @@ from . import Deserializable
 class Chat(Deserializable):
     __slots__ = ('id', 'type', 'title', 'username', 'first_name', 'last_name', 'all_members_are_administrators')
 
-    def __init__(self, data, id, type, title, username, first_name, last_name, all_members_are_administrators):
-        self.data = data
-
+    def __init__(self, id, type, title, username, first_name, last_name, all_members_are_administrators):
         self.id = id
         self.type = type
         self.title = title
@@ -16,18 +14,18 @@ class Chat(Deserializable):
         self.all_members_are_administrators = all_members_are_administrators
 
     @classmethod
-    def de_json(cls, data) -> 'Chat':
-        data = cls.check_json(data)
+    def de_json(cls, raw_data) -> 'Chat':
+        raw_data = cls.check_json(raw_data)
 
-        id: int = data.get('id')
-        type: str = data.get('type')
-        title: str = data.get('title')
-        username: str = data.get('username')
-        first_name: str = data.get('first_name')
-        last_name: str = data.get('last_name')
-        all_members_are_administrators: bool = data.get('all_members_are_administrators')
+        id: int = raw_data.get('id')
+        type: str = raw_data.get('type')
+        title: str = raw_data.get('title')
+        username: str = raw_data.get('username')
+        first_name: str = raw_data.get('first_name')
+        last_name: str = raw_data.get('last_name')
+        all_members_are_administrators: bool = raw_data.get('all_members_are_administrators')
 
-        return Chat(data, id, type, title, username, first_name, last_name, all_members_are_administrators)
+        return Chat(id, type, title, username, first_name, last_name, all_members_are_administrators)
 
     async def send_message(self, text):
         self.bot.send_message(self.id, text)
