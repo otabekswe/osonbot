@@ -1,4 +1,4 @@
-from osonbot.types import Deserializable
+from . import Deserializable
 from osonbot.types.message import Message
 
 
@@ -40,7 +40,6 @@ class Update(Deserializable):
         callback_query = data.get('callback_query')
         shipping_query = data.get('shipping_query')
         pre_checkout_query = data.get('pre_checkout_query')
-
         return Update(data, update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
                       chosen_inline_result, callback_query, shipping_query, pre_checkout_query)
 

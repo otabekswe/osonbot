@@ -1,6 +1,6 @@
 import datetime
 
-from osonbot.types import Deserializable
+from . import Deserializable
 from osonbot.types.chat import Chat
 from osonbot.types.user import User
 from osonbot.types.message_entity import MessageEntity
