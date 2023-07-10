@@ -1,9 +1,9 @@
 import datetime
 
 from . import Deserializable
-from osonbot.types.chat import Chat
-from osonbot.types.user import User
-from osonbot.types.message_entity import MessageEntity
+from .chat import Chat
+from .user import User
+from .message_entity import MessageEntity
 
 
 class Message(Deserializable):

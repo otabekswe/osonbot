@@ -1,6 +1,6 @@
 from . import Deserializable
-from osonbot.types.user import User
-from osonbot.types.message import Message
+from .user import User
+from .message import Message
 
 
 class CallbackQuery(Deserializable):

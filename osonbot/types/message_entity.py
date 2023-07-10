@@ -1,5 +1,5 @@
 from . import Deserializable
-from osonbot.types.user import User
+from .user import User
 
 
 class MessageEntity(Deserializable):

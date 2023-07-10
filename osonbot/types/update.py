@@ -1,5 +1,5 @@
 from . import Deserializable
-from osonbot.types.message import Message
+from .message import Message
 
 
 class Update(Deserializable):

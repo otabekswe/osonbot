@@ -1,4 +1,4 @@
-from osonbot.types import Deserializable
+from . import Deserializable
 
 
 class Chat(Deserializable):
