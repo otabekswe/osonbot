@@ -2,8 +2,6 @@ from . import Deserializable
 
 
 class ReplyKeyboardMarkup(Deserializable):
-    __slots__ = ('keyboard', 'is_persistent', 'resize_keyboard', 'one_time_keyboard', 'input_field_placeholder', 'selective')
-
     def __init__(self, keyboard, is_persistent, resize_keyboard, one_time_keyboard, input_field_placeholder, selective):
         self.keyboard = keyboard
         self.is_persistent = is_persistent

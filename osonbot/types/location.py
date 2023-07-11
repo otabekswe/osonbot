@@ -2,8 +2,6 @@ from . import Deserializable
 
 
 class Location(Deserializable):
-    __slots__ = ('longitude', 'latitude', 'horizontal_accuracy', 'live_period', 'heading', 'proximity_alert_radius')
-
     def __init__(self, longitude, latitude, horizontal_accuracy, live_period, heading, proximity_alert_radius):
         self.longitude = longitude
         self.latitude = latitude

@@ -18,10 +18,10 @@ class OsonBot:
             loop = asyncio.get_event_loop()
 
         self.loop = loop
-        self.session = aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(limit=connections_limit),
-            loop=self.loop
-        )
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=connections_limit), loop=self.loop)
+
+    def __on_exit(self):
+        self.session.close()
 
     def __del__(self):
         self.session.close()

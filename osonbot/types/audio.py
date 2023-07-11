@@ -3,9 +3,6 @@ from .photo_size import PhotoSize
 
 
 class Audio(Deserializable):
-    __slots__ = ('field_id', 'file_unique_id', 'duration', 'performer', 'title', 'file_name', 'mime_type', 'file_size',
-                 'thumbnail')
-
     def __init__(self, field_id, file_unique_id, duration, performer, title, file_name, mime_type, file_size,
                  thumbnail):
         self.field_id = field_id

@@ -1,3 +1,5 @@
+import datetime
+import time
 import json
 
 
@@ -9,15 +11,28 @@ class Serializable:
 class Deserializable:
     def to_json(self):
         result = {}
-        for item in self.__slots__ or list(self.__dict__.keys()):
-            attribute = getattr(self, item)
-            if not attribute:
+        for key, value in self.__dict__.keys():
+            if not value or key == '_bot':
                 continue
-            if hasattr(attribute, 'to_json'):
-                attribute = getattr(attribute, 'to_json')
-                attribute = attribute()
-            result[item] = attribute
+            if hasattr(value, 'to_json'):
+                value = getattr(value, 'to_json')()
+            elif isinstance(value, datetime.datetime):
+                value = int(time.mktime(value.timetuple()))
+            result[key] = value
         return result
+
+    @property
+    def bot(self):
+        if not hasattr(self, '_bot'):
+            raise AttributeError(f"{self.__class__.__name__} isn't configured!")
+        return getattr(self, '_bot')
+
+    @bot.setter
+    def bot(self, bot):
+        setattr(self, '_bot', bot)
+        for key, value in self.__dict__.items():
+            if isinstance(value, Deserializable):
+                value.bot = bot
 
     @classmethod
     def de_json(cls, raw_data):

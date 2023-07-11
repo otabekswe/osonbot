@@ -2,8 +2,6 @@ from . import Deserializable
 
 
 class Diece(Deserializable):
-    __slots__ = ('emoji', 'value')
-
     def __init__(self, emoji, value):
         self.emoji = emoji
         self.value = value

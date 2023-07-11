@@ -1,11 +1,8 @@
 from . import Deserializable
+from .user import User
 
 
 class Poll(Deserializable):
-    __slots__ = ('id', 'question', 'options', 'total_voter_count', 'is_closed', 'is_anonymous', 'type',
-                 'allows_multiple_answers', 'correct_option_id', 'explanation', 'explanation_entities', 'open_period',
-                 'close_date')
-
     def __init__(self, id, question, options, total_voter_count, is_closed, is_anonymous, type,
                  allows_multiple_answers, correct_option_id, explanation, explanation_entities, open_period,
                  close_date):
@@ -42,3 +39,21 @@ class Poll(Deserializable):
         close_date: int = raw_data.get('close_date')
         return Poll(id, question, options, total_voter_count, is_closed, is_anonymous, type, allows_multiple_answers,
                     correct_option_id, explanation, explanation_entities, open_period, close_date)
+
+
+class PollOption(Deserializable):
+    __slots__ = ('poll_id', 'user', 'option_ids')
+
+    def __init__(self, poll_id, user, option_ids):
+        self.poll_id = poll_id
+        self.user = user
+        self.option_ids = option_ids
+
+    @classmethod
+    def de_json(cls, raw_data):
+        raw_data = cls.check_json(raw_data)
+
+        poll_id: str = raw_data.get('poll_id')
+        user: User = raw_data.get('user')
+        option_ids: list[int] = raw_data.get('option_ids')
+        return PollOption(poll_id, user, option_ids)

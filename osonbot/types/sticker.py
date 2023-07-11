@@ -3,8 +3,6 @@ from .photo_size import PhotoSize
 
 
 class Sticker(Deserializable):
-    __slots__ = ('file_id', 'width', 'height', 'thumbnail', 'emoji', 'file_size')
-
     def __init__(self, file_id, width, height, thumbnail, emoji, file_size):
         self.file_id = file_id
         self.width = width

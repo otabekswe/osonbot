@@ -4,8 +4,6 @@ from .message import Message
 
 
 class CallbackQuery(Deserializable):
-    __slots__ = ('id', 'from', 'message', 'inline_message_id', 'chat_instance', 'cq_data', 'game_short_name')
-
     def __init__(self, id, from_user, message, inline_message_id, chat_instance, cq_data, game_short_name):
         self.id = id
         self.from_user = from_user

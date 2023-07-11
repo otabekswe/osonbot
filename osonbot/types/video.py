@@ -3,9 +3,6 @@ from .photo_size import PhotoSize
 
 
 class Video(Deserializable):
-    __slots__ = ('file_id', 'file_unique_id', 'width', 'height', 'duration', 'thumbnail', 'file_name', 'mime_type',
-                 'file_size')
-
     def __init__(self, file_id, file_unique_id, width, height, duration, thumbnail, file_name, mime_type,
                  file_size):
         self.file_id = file_id

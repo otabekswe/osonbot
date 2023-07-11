@@ -3,8 +3,6 @@ from .location import Location
 
 
 class Venue(Deserializable):
-    __slots__ = ('location', 'title', 'address', 'foursquare_id', 'foursquare_type', 'google_place_id', 'google_place_type')
-
     def __init__(self, location, title, address, foursquare_id, foursquare_type, google_place_id, google_place_type):
         self.location = location
         self.title = title

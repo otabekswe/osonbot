@@ -3,8 +3,6 @@ from .photo_size import PhotoSize
 
 
 class Document(Deserializable):
-    __slots__ = ('file_id', 'file_unique_id', 'thumbnail', 'file_name', 'mime_type', 'file_size')
-
     def __init__(self, file_id, file_unique_id, thumbnail, file_name, mime_type, file_size):
         self.file_id = file_id
         self.file_unique_id = file_unique_id
