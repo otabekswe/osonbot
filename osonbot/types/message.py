@@ -4,6 +4,7 @@ from . import Deserializable
 from .chat import Chat
 from .user import User
 from .message_entity import MessageEntity
+from osonbot.exceptions import TelegramAPIError
 
 
 class Message(Deserializable):
@@ -149,9 +150,34 @@ class Message(Deserializable):
             new_chat_photo, delete_chat_photo, group_chat_created, supergroup_chat_created, channel_chat_created,
             migrate_to_chat_id, migrate_from_chat_id, pinned_message, invoice, successful_payment, content_type)
 
-
     def is_command(self):
         return self.text and self.text.startswith('/')
+
+    async def reply(self, text, parse_mode=None, disable_web_page_preview=None, disable_notification=None,
+                    protect_content=None, allow_sending_without_reply=None, reply_markup=None):
+        return await self.bot.send_message(self.chat.id, text, parse_mode, disable_web_page_preview,
+                                           disable_notification, protect_content, self.message_id,
+                                           allow_sending_without_reply, reply_markup)
+
+    async def delete(self):
+        try:
+            await self.bot.delete_message(self.chat.id, self.message_id)
+        except TelegramAPIError:
+            return False
+        return True
+
+    async def edit(self, text, parse_mode=None,
+                           disable_web_page_preview=None, reply_markup=None):
+        try:
+            await self.bot.edit_message(self.chat.id, self.message_id, text, parse_mode, disable_web_page_preview,
+                                        reply_markup)
+        except TelegramAPIError:
+            return False
+        return True
+
+    async def forward(self, chat_id, disable_notifications, protect_content):
+        await self.bot.forward_message(self.from_user.id, chat_id, self.message_id, disable_notifications, protect_content)
+        return True
 
 
 class ContentType:

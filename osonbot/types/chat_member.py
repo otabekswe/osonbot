@@ -18,3 +18,20 @@ class ChatMember(Deserializable):
         is_anonymous: bool = raw_data.get('is_anonymous')
         custom_title: str = raw_data.get('custom_title')
         return ChatMember(status, user, is_anonymous, custom_title)
+
+
+class ChatMemberStatus:
+    OWNER = 'creator'
+    ADMINISTRATOR = 'administrator'
+    MEMBER = 'member'
+    RESTRICTED = 'restricted'
+    LEFT = 'left'
+    BANNED = 'kicked'
+
+    @classmethod
+    def is_admin(cls, status):
+        return status in (cls.ADMINISTRATOR, cls.OWNER)
+
+    @classmethod
+    def is_member(cls, status):
+        return status in (cls.MEMBER, cls.OWNER, cls.ADMINISTRATOR)
